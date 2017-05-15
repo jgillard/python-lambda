@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
-# flake8: noqa
-__author__ = 'Nick Ficano'
-__email__ = 'nficano@gmail.com'
-__version__ = '0.7.0'
 
-from .aws_lambda import deploy, invoke, init, build, cleanup_old_versions
+from .aws_lambda import invoke, init
 
 # Set default logging handler to avoid "No handler found" warnings.
 import logging

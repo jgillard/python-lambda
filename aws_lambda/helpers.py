@@ -1,12 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-import zipfile
-import datetime as dt
-
-
-def mkdir(path):
-    if not os.path.exists(path):
-        os.makedirs(path)
+import shutil
 
 
 def read(path, loader=None):
@@ -16,17 +10,13 @@ def read(path, loader=None):
         return loader(fh.read())
 
 
-def archive(src, dest, filename):
-    output = os.path.join(dest, filename)
-    zfh = zipfile.ZipFile(output, 'w', zipfile.ZIP_DEFLATED)
-
-    for root, _, files in os.walk(src):
-        for file in files:
-            zfh.write(os.path.join(root, file))
-    zfh.close()
-    return os.path.join(dest, filename)
-
-
-def timestamp(fmt='%Y-%m-%d-%H%M%S'):
-    now = dt.datetime.utcnow()
-    return now.strftime(fmt)
+def custom_copytree(src, dst, minimal, symlinks=False, ignore=None):
+    for item in os.listdir(src):
+        if (minimal and item == 'event.json') or item.endswith('.pyc') or item == '__pycache__':
+            continue
+        s = os.path.join(src, item)
+        d = os.path.join(dst, item)
+        if os.path.isdir(s):
+            shutil.copytree(s, d, symlinks, ignore)
+        else:
+            shutil.copy(s, d)
